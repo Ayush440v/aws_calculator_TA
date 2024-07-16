@@ -10,8 +10,9 @@ import plotly.express as px
 create_table()
 
 # Title of the application
+st.set_page_config(page_title="AWS Cost Calculator")
 st.title("AWS Costing Calculator")
-st.write("This application helps you estimate the monthly costs of using AWS services for your application.")
+st.write("This application helps you estimate the monthly costs of using AWS services for your application. Powered by TechAhead")
 
 # User inputs
 industry, features, total_users, monthly_active_users, concurrent_users, storage, streaming, media_processing, usage_type = get_user_inputs()
