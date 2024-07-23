@@ -19,7 +19,7 @@ industry, features, total_users, monthly_active_users, concurrent_users, storage
 
 # Calculate costs
 if st.button("Calculate Costs"):
-    costs, total_cost = calculate_costs(features, total_users, monthly_active_users, concurrent_users, storage, streaming, media_processing, usage_type)
+    costs, total_cost, ec2_instance, rds_instance = calculate_costs(features, total_users, monthly_active_users, concurrent_users, storage, streaming, media_processing, usage_type)
     st.divider()
     st.header("Your expected monthly AWS costs are as follows:")
     st.subheader(f"Total Monthly Cost: ${total_cost:.2f}")
@@ -29,6 +29,10 @@ if st.button("Calculate Costs"):
     # Display cost breakdown in a table
     cost_df = pd.DataFrame(costs.items(), columns=['Service', 'Cost'])
     st.dataframe(cost_df, hide_index=True, use_container_width=True)
+    
+    st.subheader("Instance Sizes Used")
+    st.write(f"EC2 Instance: {ec2_instance}")
+    st.write(f"RDS Instance: {rds_instance}")
 
     # Insert the results into the database
     insert_costs(features, total_users, monthly_active_users, concurrent_users, total_cost)
