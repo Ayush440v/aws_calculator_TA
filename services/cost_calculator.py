@@ -63,7 +63,13 @@ ec2_instance_mapping = {
     "m5.12xlarge": 2.304,
     "m5.16xlarge": 3.072,
     "m5.24xlarge": 4.608,
-    "m5.metal": 5.52
+    "m5.metal": 5.52,
+    "c5.large": 0.085,
+    "c5.xlarge": 0.17,
+    "c5.2xlarge": 0.34,
+    "c5.4xlarge": 0.68,
+    "c5.9xlarge": 1.53,
+    "c5.18xlarge": 3.06
 }
 
 rds_instance_mapping = {
@@ -72,7 +78,13 @@ rds_instance_mapping = {
     "db.t2.medium": 0.068,
     "db.t2.large": 0.136,
     "db.t2.xlarge": 0.272,
-    "db.t2.2xlarge": 0.544
+    "db.t2.2xlarge": 0.544,
+    "db.m5.large": 0.115,
+    "db.m5.xlarge": 0.23,
+    "db.m5.2xlarge": 0.46,
+    "db.m5.4xlarge": 0.92,
+    "db.m5.12xlarge": 2.76,
+    "db.m5.24xlarge": 5.52
 }
 
 def get_ec2_instance(concurrent_users):
@@ -104,6 +116,10 @@ def get_ec2_instance(concurrent_users):
         return "m5.16xlarge"
     elif concurrent_users <= 200000:
         return "m5.24xlarge"
+    elif concurrent_users <= 500000:
+        return "c5.9xlarge"
+    elif concurrent_users <= 1000000:
+        return "c5.18xlarge"
     else:
         return "m5.metal"
 
@@ -118,17 +134,36 @@ def get_rds_instance(total_users):
         return "db.t2.large"
     elif total_users <= 10000:
         return "db.t2.xlarge"
-    else:
+    elif total_users <= 50000:
         return "db.t2.2xlarge"
+    elif total_users <= 100000:
+        return "db.m5.large"
+    elif total_users <= 200000:
+        return "db.m5.xlarge"
+    elif total_users <= 500000:
+        return "db.m5.2xlarge"
+    elif total_users <= 1000000:
+        return "db.m5.4xlarge"
+    else:
+        return "db.m5.24xlarge"
 
 def calculate_costs(features, total_users, monthly_active_users, concurrent_users, storage, streaming, media_processing, usage_type):
     costs = {}
+    include_ec2 = False
+    
+    # Check if EC2 should be included
+    for feature in features:
+        services = feature_service_mapping.get(feature, [])
+        if "EC2" in services:
+            include_ec2 = True
+            break
     
     # Calculate EC2 and RDS instance sizes and costs
-    ec2_instance = get_ec2_instance(concurrent_users)
-    rds_instance = get_rds_instance(total_users)
+    if include_ec2:
+        ec2_instance = get_ec2_instance(concurrent_users)
+        costs["EC2"] = ec2_instance_mapping[ec2_instance] * 730  # Assuming 730 hours per month
     
-    costs["EC2"] = ec2_instance_mapping[ec2_instance] * 730  # Assuming 730 hours per month
+    rds_instance = get_rds_instance(total_users)
     costs["RDS"] = rds_instance_mapping[rds_instance] * 730  # Assuming 730 hours per month
     
     for feature in features:
