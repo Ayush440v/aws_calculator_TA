@@ -20,13 +20,31 @@ def get_user_inputs():
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        total_users = st.number_input("Total Users", min_value=1, value=1000, step=100)
+        total_users = st.number_input(
+            "Total Registered Users", 
+            min_value=1, 
+            value=10000, 
+            step=100, 
+            help="This is the total number of users you would expect to be registered on your platform."
+        )
     
     with col2:
-        monthly_active_users = st.number_input("Monthly Active Users", min_value=1, value=500, step=50)
+        monthly_active_users = st.number_input(
+            "Monthly Active Users", 
+            min_value=1, 
+            value=1000, 
+            step=50, 
+            help="This is the number of users who would be using your platform at least once in a month. A good estimate is 1/10th of total registered users."
+        )
     
     with col3:
-        concurrent_users = st.number_input("Concurrent Users", min_value=1, value=50, step=5)
+        concurrent_users = st.number_input(
+            "Concurrent Users", 
+            min_value=1, 
+            value=100, 
+            step=5, 
+            help="This is the number of users who would be using your platform at the same time. A good estimate is 1/10th of monthly active users."
+        )
 
     st.header("Specify Your Usage Type")
     

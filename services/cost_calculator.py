@@ -54,7 +54,16 @@ ec2_instance_mapping = {
     "t2.medium": 0.0464,
     "t2.large": 0.0928,
     "t2.xlarge": 0.1856,
-    "t2.2xlarge": 0.3712
+    "t2.2xlarge": 0.3712,
+    "m5.large": 0.096,
+    "m5.xlarge": 0.192,
+    "m5.2xlarge": 0.384,
+    "m5.4xlarge": 0.768,
+    "m5.8xlarge": 1.536,
+    "m5.12xlarge": 2.304,
+    "m5.16xlarge": 3.072,
+    "m5.24xlarge": 4.608,
+    "m5.metal": 5.52
 }
 
 rds_instance_mapping = {
@@ -77,8 +86,26 @@ def get_ec2_instance(concurrent_users):
         return "t2.large"
     elif concurrent_users <= 200:
         return "t2.xlarge"
-    else:
+    elif concurrent_users <= 500:
         return "t2.2xlarge"
+    elif concurrent_users <= 1000:
+        return "m5.large"
+    elif concurrent_users <= 2000:
+        return "m5.xlarge"
+    elif concurrent_users <= 5000:
+        return "m5.2xlarge"
+    elif concurrent_users <= 10000:
+        return "m5.4xlarge"
+    elif concurrent_users <= 20000:
+        return "m5.8xlarge"
+    elif concurrent_users <= 50000:
+        return "m5.12xlarge"
+    elif concurrent_users <= 100000:
+        return "m5.16xlarge"
+    elif concurrent_users <= 200000:
+        return "m5.24xlarge"
+    else:
+        return "m5.metal"
 
 def get_rds_instance(total_users):
     if total_users <= 100:
