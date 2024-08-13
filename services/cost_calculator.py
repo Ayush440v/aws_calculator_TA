@@ -9,7 +9,7 @@ feature_service_mapping = {
     "Comments": ["Lambda", "DynamoDB", "API Gateway"],  # Added API Gateway
     "Likes": ["Lambda", "DynamoDB", "API Gateway"],  # Added API Gateway
     "Sharing": ["Lambda", "API Gateway"],  # Added API Gateway
-    "Notifications": ["SNS", "EC2", "API Gateway"],  # Added API Gateway
+    "Notifications": ["SNS", "API Gateway"],  # Added API Gateway
     "Search and Filters": ["Lambda", "ElasticSearch", "RDS", "API Gateway"],  # Added API Gateway
     "Product Listings": ["Lambda", "API Gateway"],  # Added API Gateway
     "Shopping Cart": ["Lambda", "RDS", "API Gateway"],  # Added API Gateway
@@ -196,4 +196,4 @@ def calculate_costs(features, total_users, monthly_active_users, concurrent_user
                 costs[service] += service_costs[service](search_requests)
 
     total_cost = sum(costs.values())
-    return costs, total_cost, ec2_instance, rds_instance
+    return costs, total_cost, ec2_instance if include_ec2 else None, rds_instance
