@@ -10,7 +10,7 @@ feature_service_mapping = {
     "Likes": ["Lambda", "DynamoDB", "API Gateway"],  # Added API Gateway
     "Sharing": ["Lambda", "API Gateway"],  # Added API Gateway
     "Notifications": ["SNS", "API Gateway"],  # Added API Gateway
-    "Search and Filters": ["Lambda", "ElasticSearch", "RDS", "API Gateway"],  # Added API Gateway
+    "Search and Filters": ["Lambda", "RDS", "API Gateway"],  # Added API Gateway
     "Product Listings": ["Lambda", "API Gateway"],  # Added API Gateway
     "Shopping Cart": ["Lambda", "RDS", "API Gateway"],  # Added API Gateway
     "Checkout": ["Lambda", "RDS", "API Gateway"],  # Added API Gateway
